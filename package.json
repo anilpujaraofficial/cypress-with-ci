@@ -3,6 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "cy:clean:saveData": "rm -rf cypress/fixtures/TestData",
+    "cy:clean:report": "rm -rf ./cypress/reports && mkdir ./cypress/reports && mkdir ./cypress/reports/mochareports && rm -rf cypress/screenshots && rm -rf cypress/videos",
+    "pretest": "npm run cy:clean:saveData && npm run cy:clean:report",
+    "cy:combine:report": "npx mochawesome-merge ./cypress/reports/mocha/*.json -o ./cypress/reports/mochareports/report.json",
+    "cy:generate:report": "npx marge ./cypress/reports/mochareports/report.json  -o ./cypress/reports/mochareports",
+    "cy:cloud:io": "npx cypress run --record --key da6877e1-a5c8-457b-a189-2a9b4c478e49 --parallel --group regression_testing --ci-build-id $BUILD_IDS",
+    "cy:flow:test": "npx cypress run --env grepTags=@flowTest",
+    "posttest": "npm run cy:combine:report && npm run cy:generate:report"
+  },
   "dependencies": {
     "cypress": "^13.15.2",
     "mochawesome": "^7.1.3",
